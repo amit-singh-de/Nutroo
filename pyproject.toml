@@ -1,0 +1,24 @@
+[project]
+name = "nutroo"
+version = "0.1.0"
+description = "Your AI Assistant for Meal Prep Especially for GYM lovers."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "dotenv>=0.9.9",
+    "ipykernel>=7.3.0",
+    "ipywidgets>=8.1.9",
+    "jupyterlab>=4.6.3",
+    "langchain[openai]>=1.4.0",
+    "langchain-core>=1.6.3",
+    "langchain-deepseek>=1.1.0",
+    "langgraph>=1.2.11",
+    "langgraph-api>=0.14.1",
+    "langgraph-cli>=0.4.31",
+    "langsmith>=0.12.5",
+    "mcp>=2.2.0",
+    "pydantic>=2.13.5",
+    "langchain-tavily>=0.2.18",
+    "langchain-community>=0.4.2",
+    "tavily>=1.1.0",
+]
