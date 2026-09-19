@@ -3,7 +3,6 @@ from typing import Any,Dict
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from pydantic import ValidationError
-
 from domain.user import DailyGoals, IngredientsInput
 from prompts.ask import ASK_DAILY_GOALS, ASK_INGREDIENTS
 from prompts.suggest_meal import suggest_meal
@@ -11,7 +10,8 @@ from prompts.system_prompt import PERSONA
 from tools.websearch import WebSearch
 from langchain.tools import tool
 from langchain.agents import create_agent
-
+from langgraph.checkpoint.memory import InMemorySaver
+from langsmith import uuid7
 @tool()
 def web_search_tool(query: str) -> Dict[str,Any]:
     """Perform a web search using the Tavily client."""
@@ -26,7 +26,7 @@ def build_agent():
         api_key=os.getenv("DEEPSEEK_API_KEY"),
         base_url=os.getenv("DEEPSEEK_BASE_URL"),
     )
-    return create_agent(model=model, tools=[web_search_tool])
+    return create_agent(model=model, tools=[web_search_tool],checkpointer=InMemorySaver())
 
 
 GOAL_FIELDS = {
@@ -88,10 +88,13 @@ def main():
 
     print("\nThinking...\n")
     agent = build_agent()
+    thread_config = {"configurable": {"thread_id": str(uuid7())}}
+    print(f"Starting Session with thread_id: {thread_config['configurable']['thread_id']}")
     reply = agent.invoke(
-        {"messages": [PERSONA, suggest_meal(goals, ingredients)]},
+        {"messages": [PERSONA, suggest_meal(goals, ingredients)]},thread_config
     )
     print(reply["messages"][-1].content)
+
 
 
 if __name__ == "__main__":
