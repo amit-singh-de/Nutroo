@@ -1,7 +1,0 @@
-{
-  "dependencies": ["."],
-  "graphs": {
-    "agent": "./main.py:build_agent"
-  },
-  "env": "./.env"
-}
